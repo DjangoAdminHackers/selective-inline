@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-setup(name='django-selective-inlines',
+setup(name='django-selective-inline',
     version='0.0.1',
     description='Nice inlines for django admin',
     author='Millioner',
