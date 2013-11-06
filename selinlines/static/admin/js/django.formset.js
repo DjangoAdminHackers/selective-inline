@@ -31,11 +31,12 @@ var djangoFormset = (function($){
             self.total_forms_el = self.options.total_forms_el || $('#id_' + self.options.prefix + '-TOTAL_FORMS');
             self.max_forms_el = self.options.max_forms_el || $('#id_' + self.options.prefix + '-MAX_NUM_FORMS');
 
-            $('body').delegate('.' + self.options.del_form_link_class, 'click', function(e){
-                self.remove_form($(this), e);
-                e.preventDefault();
-                return false;
-            });
+            $('.' + self.options.form_container_class).first().parent()
+                .delegate('.' + self.options.del_form_link_class, 'click', function(e){
+                    self.remove_form($(this), e);
+                    e.preventDefault();
+                    return false;
+                });
 
             if(self.options.add_form_link){
                 self.options.add_form_link.click(function(e){
@@ -48,19 +49,18 @@ var djangoFormset = (function($){
 
         remove_form: function(link, event){
             var self = this,
-                target_form = link.closest('.' + self.options.form_container_class);
-
-            target_form.nextAll('.' + self.options.form_container_class).each(function(index, el){
-                self.set_new_form_index($(el), null);
-            });
+                target_form = link.closest('.' + self.options.form_container_class),
+                removed_index = self.id_regex.exec(target_form.find(':input').attr('name')).pop(),
+                siblings = target_form.siblings('.' + self.options.form_container_class);
 
             target_form.remove();
+
+            siblings.each(function(i, el){ self.decrease_form_index($(el), removed_index); });
+
             self.total_forms_el.val(parseInt(self.total_forms_el.val()) - 1);
             if(self.options.postFormDelete){
                 self.options.postFormDelete(self);
             }
-
-
         },
 
         add_form: function(link, event){
@@ -106,6 +106,33 @@ var djangoFormset = (function($){
                         index = self.id_regex.exec($el.attr('for')).pop() - 1;
                     }
                     $el.attr('for', $el.attr('for').replace(self.id_regex, self.options.prefix + '-' + index ));
+                }
+            });
+            form.data('form-num', index);
+        },
+
+        decrease_form_index: function(form, removed_index){
+            var self = this,
+                index = null;
+
+            form.find(':input').each(function(i, el){
+                var $el = $(el);
+                index = self.id_regex.exec($el.attr('name')).pop();
+                if(index > removed_index){
+                    index --;
+                    $el.attr('id', $el.attr('id').replace(self.id_regex, self.options.prefix + '-' + index ));
+                    $el.attr('name', $el.attr('name').replace(self.id_regex, self.options.prefix + '-' + index ));
+                }
+            });
+
+            form.find('label').each(function(i, el){
+                var $el = $(el);
+                if($el.attr('for')){
+                    index = self.id_regex.exec($el.attr('for')).pop();
+                    if(index > removed_index){
+                        index --;
+                        $el.attr('for', $el.attr('for').replace(self.id_regex, self.options.prefix + '-' + index ));
+                    }
                 }
             });
             form.data('form-num', index);

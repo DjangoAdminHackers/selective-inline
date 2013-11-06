@@ -16,3 +16,6 @@ class Book(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=12)
     in_stock = models.NullBooleanField()
     order_num = models.PositiveSmallIntegerField(default=0)
+
+    def __unicode__(self):
+        return self.title

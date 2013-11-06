@@ -88,7 +88,7 @@
                     title_container.children().each(function(i, el){
                         var $el = $(el);
                         if($el.data('form-num')){
-                            $el.find('.counter').text($el.data('form-num') + 1);
+                            $el.find('.counter').text(parseInt($el.data('form-num')) + 1);
                         }
                     });
                 }
@@ -122,11 +122,29 @@
                 containment: "parent",
                 "cursorAt": { top: 5 },
                 forceHelperSize: true,
-{#                grid: [ 20, 10 ],#}
                 tolerance: "pointer",
                 handle: '.selective-grab-holder',
                 helper: function(){
-                    return $('<div class="dragged-clone"></div>')
+                    return $('<div class="dragged-clone"></div>');
+                },
+                stop: function(event, ui){
+                    title_container.children().each(function(i, el){
+                        $(el).find('.orderable-input').val(i);
+                    });
+                }
+            });
+
+            var max_order = 0;
+            title_container.children().each(function(i, el){
+                var order_el = $(el).find('.orderable-input'),
+                    order_val = parseInt(order_el.val() || 0);
+                if(order_val){
+                    if(order_val > max_order){
+                        max_order = order_val;
+                    }
+                } else {
+                    max_order++;
+                    order_el.val(max_order);
                 }
             });
         {% endif %}
