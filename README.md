@@ -1,7 +1,7 @@
 django-selective-inline
 =======================
 
-This is a small app for creating nice inlines in django admin::
+This is a small app for creating nice inlines in django admin:
 
 ![Alt text](https://raw.github.com/DjangoAdminHackers/selective-inline/master/example/example.png)
 
@@ -9,7 +9,7 @@ This is a small app for creating nice inlines in django admin::
 Installing
 ----------
 
-You may install it via `pip` or clone all repository::
+You may install it via `pip` or clone all repository:
 
     pip install git+https://github.com/DjangoAdminHackers/selective-inline.git
 
@@ -21,7 +21,7 @@ Usage
 
 The app provides one more inline class which supports all admin inline options and more.
 
-So admin.py example file::
+So admin.py example file:
 
     from django.contrib import admin
     from selinline.admin import SelectiveInline
