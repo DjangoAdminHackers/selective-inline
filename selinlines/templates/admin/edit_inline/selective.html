@@ -7,7 +7,7 @@
     <div class="selective-inline-titles" id="{{ inline_admin_formset.formset.prefix }}-titles">
         <ul>
             {% for inline_admin_form in inline_admin_formset %}
-                <li class="{% if forloop.last %}empty-title{% else %}selective-inline-item{% endif %}">
+                <li class="{% if forloop.last %}empty-title{% else %}selective-inline-item{% endif %} {% if inline_admin_form.form.errors %}error{% endif %}">
                     <div class="title-holder">
                         {% if inline_admin_form.original %}
                             {{ inline_admin_form.original }}
@@ -21,6 +21,16 @@
                             {% endif %}
                         {% else %}
                             <a class="inline-deletelink" href="#">{% trans "Remove" %}</a>
+                        {% endif %}
+                        {% if inline_admin_formset.opts.orderable_field %}
+                            <span class="selective-grab-holder">
+                                <img src="{% static "admin/img/nav-bg-grabber.gif" %}" />
+                            </span>
+                        {% endif %}
+                        {% if inline_admin_form.form.errors %}
+                            <span class="error-symbol">
+                                <img src="{% static "admin/img/icon_alert.gif" %}" />
+                            </span>
                         {% endif %}
                     </div>
                     <div class="inline-related" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">

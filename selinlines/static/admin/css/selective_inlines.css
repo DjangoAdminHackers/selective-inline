@@ -24,6 +24,11 @@
 
 .selective-inline-titles ul li.empty-title { display: none; }
 .selective-inline-titles ul li.selective-inline-item.active-title { background: #99c2ec}
+.selective-inline-titles ul li.selective-inline-item.error {
+    /*background: #ffc;*/
+    border: 1px solid #faa5a2;
+    color: #fa4c4a;
+}
 
 .selective-inline-item .inline-related {
     display: none;
@@ -37,6 +42,14 @@
 .selective-inline-item.active-title > .inline-related { display: block; }
 
 .selective-inline-item .delete { display: block; position: absolute; right: 0; top: -1px; }
+.selective-inline-item .error-symbol {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: 14px;
+    top: -1px;
+}
+.selective-grab-holder { position: absolute; left: 0; top: 0; height: 20px; width: 10px; }
 
 .sortable-placeholder { height: 20px; border: solid 1px #ecea29; }
 .dragged-clone { height: 20px; border: solid 1px #ecea29; width: 300px; }
