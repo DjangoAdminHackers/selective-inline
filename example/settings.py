@@ -65,7 +65,7 @@ ROOT_URLCONF = 'urls'
 
 INSTALLED_APPS = (
     'test_project',
-    'selinlines',
+    'selinline',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.messages',

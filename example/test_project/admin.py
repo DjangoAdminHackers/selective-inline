@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from selinlines.admin import SelectiveInline
+from selinline.admin import SelectiveInline
 
 from .models import Author, Book
 
