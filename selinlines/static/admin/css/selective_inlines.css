@@ -15,12 +15,11 @@
     display: block;
     background: #f9f9f9;
     border: 1px solid #eee;
-    padding: 4px 4px 4px 15px;
     margin: 5px;
-    height: 15px;
+    height: 23px;
     cursor: pointer;
 }
-.title-holder { position: relative; }
+.title-holder { position: relative; padding: 4px 4px 4px 15px; }
 
 .selective-inline-titles ul li.empty-title { display: none; }
 .selective-inline-titles ul li.selective-inline-item.active-title { background: #99c2ec}
@@ -41,7 +40,23 @@
 }
 .selective-inline-item.active-title > .inline-related { display: block; }
 
-.selective-inline-item .delete { display: block; position: absolute; right: 0; top: -1px; }
+.selective-inline-item .delete { display: none; }
+.selective-inline-item.deleted .deleted-hover { display: block; }
+.deleted-hover {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: -1px;
+    text-align: center;
+    background: #dddddd;
+    opacity: 0.8;
+    width: 288px;
+    height: 17px;
+    padding: 4px 0;
+    color: black;
+}
+.deleted-hover span { opacity: 1; }
+
 .selective-inline-item .error-symbol {
     position: absolute;
     width: 16px;
