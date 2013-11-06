@@ -1,0 +1,102 @@
+{% load i18n admin_static %}
+<div class="inline-group selective-inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
+    <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }}</h2>
+    {{ inline_admin_formset.formset.management_form }}
+    {{ inline_admin_formset.formset.non_form_errors }}
+
+    <div class="selective-inline-titles" id="{{ inline_admin_formset.formset.prefix }}-titles">
+        <ul>
+            {% for inline_admin_form in inline_admin_formset %}
+                <li class="{% if forloop.last %}empty-title{% else %}selective-inline-item{% endif %}">
+                    <div class="title-holder">
+                        {% if inline_admin_form.original %}
+                            {{ inline_admin_form.original }}
+                        {% else %}
+                            {{ inline_admin_formset.opts.verbose_name|title }}
+                            #<span class="counter">{{ forloop.counter }}</span>
+                        {% endif %}
+                        {% if inline_admin_form.original %}
+                            {% if inline_admin_formset.formset.can_delete %}
+                                <span class="delete">{{ inline_admin_form.deletion_field.field }}</span>
+                            {% endif %}
+                        {% else %}
+                            <a class="inline-deletelink" href="#">{% trans "Remove" %}</a>
+                        {% endif %}
+                    </div>
+                    <div class="inline-related" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
+                        {% if inline_admin_form.show_url %}
+                            <h3>
+                                <a href="{% url 'admin:view_on_site' inline_admin_form.original_content_type_id inline_admin_form.original.pk %}">
+                                    {% trans "View on site" %}
+                                </a>
+                            </h3>
+                        {% endif %}
+                        {{ inline_admin_form.form.non_field_errors }}
+                        {% for fieldset in inline_admin_form %}
+                            {% include "admin/includes/fieldset.html" %}
+                        {% endfor %}
+                        {% if inline_admin_form.has_auto_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
+                        {{ inline_admin_form.fk_field.field }}
+                        {{ inline_admin_form.form.show_orderable_field }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <div class="add-row">
+        <a href="#" id="{{ inline_admin_formset.formset.prefix }}-inline-add">
+            {% blocktrans with verbose_name=inline_admin_formset.opts.verbose_name|title %}Add another {{ verbose_name }}{% endblocktrans %}
+        </a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function($){
+        var prefix = '{{ inline_admin_formset.formset.prefix }}',
+            title_container = $('#' + prefix + '-titles').children('ul'),
+            formset = new djangoFormset({
+                'prefix': prefix,
+                'empty_form': title_container.find('.empty-title'),
+                'form_container_class': 'selective-inline-item',
+                'del_form_link_class': 'inline-deletelink',
+                'add_form_link': $('#' + prefix + '-inline-add'),
+                'empty_form_class': 'empty-title',
+                'postFormAdd': function(new_form, obj){
+                    var index = parseInt(obj.total_forms_el.val());
+                    new_form.find('.title-holder .counter').text(index).click();
+                },
+                'postFormDelete': function(obj){
+                    title_container.children().each(function(i, el){
+                        var $el = $(el);
+                        if($el.data('form-num')){
+                            $el.find('.counter').text($el.data('form-num') + 1);
+                        }
+                    });
+                }
+            });
+
+        $(title_container).delegate('.selective-inline-item', 'click', function(e){
+            title_container.children('.active-title').removeClass('active-title');
+            $(this).addClass('active-title');
+        });
+
+        $('#' + prefix + '-titles li:first-child').click();
+
+        {% if inline_admin_formset.opts.orderable_field %}
+            title_container.sortable({
+                placeholder: "sortable-placeholder",
+                axis: "y",
+                containment: "parent",
+                "cursorAt": { top: 5 },
+                forceHelperSize: true,
+{#                grid: [ 20, 10 ],#}
+                tolerance: "pointer",
+                helper: function(){
+                    return $('<div class="dragged-clone"></div>')
+                }
+            });
+        {% endif %}
+    })(django.jQuery);
+</script>

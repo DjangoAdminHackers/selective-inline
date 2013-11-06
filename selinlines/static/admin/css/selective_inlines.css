@@ -1,0 +1,42 @@
+.selective-inline-group { position: relative; padding-bottom: 20px; }
+
+.selective-inline-group .add-row { border-top: 1px solid #ddd; position: absolute; bottom: 0; left: 0; right: 0; }
+
+.selective-inline-titles {
+    width: 300px;
+    float: left;
+    overflow-y: auto;
+    height: 350px;
+    border-right: 1px solid #eee;
+}
+
+.selective-inline-titles ul { list-style: none; margin: 0; padding: 0; }
+.selective-inline-titles li.selective-inline-item {
+    display: block;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 4px 4px 4px 15px;
+    margin: 5px;
+    height: 15px;
+    cursor: pointer;
+}
+.title-holder { position: relative; }
+
+.selective-inline-titles ul li.empty-title { display: none; }
+.selective-inline-titles ul li.selective-inline-item.active-title { background: #99c2ec}
+
+.selective-inline-item .inline-related {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    left: 301px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+.selective-inline-item.active-title > .inline-related { display: block; }
+
+.selective-inline-item .delete { display: block; position: absolute; right: 0; top: -1px; }
+
+.sortable-placeholder { height: 20px; border: solid 1px #ecea29; }
+.dragged-clone { height: 20px; border: solid 1px #ecea29; width: 300px; }
