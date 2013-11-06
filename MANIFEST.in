@@ -1,0 +1,3 @@
+include README.md
+recursive-include selinlines/static *
+recursive-include selinlines/templates *
