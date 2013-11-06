@@ -8,7 +8,7 @@ from .models import Author, Book
 
 
 class BookAdminInline(SelectiveInline):
-    #orderable_field = 'order_num'
+    orderable_field = 'order_num'
     model = Book
     extra = 1
 

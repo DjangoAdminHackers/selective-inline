@@ -64,7 +64,15 @@
     right: 14px;
     top: -1px;
 }
-.selective-grab-holder { position: absolute; left: 0; top: 0; height: 20px; width: 10px; }
+.selective-grab-holder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 22px;
+    width: 10px;
+    overflow: hidden;
+    cursor: move;
+}
 
-.sortable-placeholder { height: 20px; border: solid 1px #ecea29; }
-.dragged-clone { height: 20px; border: solid 1px #ecea29; width: 300px; }
+.sortable-placeholder { height: 22px; border: 2px solid #eee; margin: 0 4px; }
+.dragged-clone { margin-left: 4px; height: 22px; border: 2px solid #aaaaaa; width: 300px; }
