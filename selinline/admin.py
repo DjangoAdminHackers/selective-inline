@@ -1,12 +1,20 @@
 ### -*- coding: utf-8 -*- ###
+from django.contrib.admin.util import flatten_fieldsets
 
 from django.db import models
 from django import forms
 from django.utils import six
 from django.contrib.admin.options import InlineModelAdmin
 
+# django 1.5 and 1.6 compability hook
+try:
+    from django.contrib.admin.options import RenameBaseModelAdminMethods
+    base_meta_class = RenameBaseModelAdminMethods
+except ImportError:
+    base_meta_class = forms.MediaDefiningClass
 
-class OrderableDefiningClass(forms.MediaDefiningClass):
+
+class OrderableDefiningClass(base_meta_class):
     def __new__(cls, name, bases, attrs):
         new_class = super(OrderableDefiningClass, cls).__new__(cls, name, bases, attrs)
         if attrs.get('orderable_field') and new_class.form == forms.ModelForm:
@@ -40,10 +48,15 @@ class SelectiveInline(InlineModelAdmin, six.with_metaclass(OrderableDefiningClas
     def get_fieldsets(self, request, obj=None):
         if self.declared_fieldsets:
             return self.declared_fieldsets
-        form = self.get_formset(request, obj).form
+        form = self.get_formset(request, obj, fields=None).form
         fields = [f for f in list(form.base_fields) if f != self.orderable_field] \
                  + list(self.get_readonly_fields(request, obj))
         return [(None, {'fields': fields})]
+
+    def get_formset(self, request, obj=None, **kwargs):
+        if 'fields' not in kwargs and self.orderable_field:
+            kwargs['fields'] = flatten_fieldsets(self.get_fieldsets(request, obj)) + [self.orderable_field]
+        return super(SelectiveInline, self).get_formset(request, obj=obj, **kwargs)
 
     @property
     def media(self):
