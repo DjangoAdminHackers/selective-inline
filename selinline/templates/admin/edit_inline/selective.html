@@ -17,9 +17,9 @@
                         {% endif %}
                         {% if inline_admin_form.original and inline_admin_formset.formset.can_delete %}
                             <span class="delete">{{ inline_admin_form.deletion_field.field }}</span>
-                            <a class="inline-deletelink mark-deleted" href="#">{% trans "Remove" %}</a>
+                            <a class="inline-deletelink mark-deleted">{% trans "Remove" %}</a>
                         {% else %}
-                            <a class="inline-deletelink remove-container" href="#">{% trans "Remove" %}</a>
+                            <a class="inline-deletelink remove-container">{% trans "Remove" %}</a>
                         {% endif %}
 
                         {% if inline_admin_formset.opts.orderable_field %}
