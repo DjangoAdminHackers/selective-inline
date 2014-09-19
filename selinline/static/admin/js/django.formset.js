@@ -31,10 +31,11 @@ var djangoFormset = (function($){
             self.total_forms_el = self.options.total_forms_el || $('#id_' + self.options.prefix + '-TOTAL_FORMS');
             self.max_forms_el = self.options.max_forms_el || $('#id_' + self.options.prefix + '-MAX_NUM_FORMS');
 
-            $('.' + self.options.form_container_class).first().parent()
+            $('.' + self.options.form_container_class).parent()
                 .delegate('.' + self.options.del_form_link_class, 'click', function(e){
                     self.remove_form($(this), e);
                     e.preventDefault();
+                    console.log("called");
                     return false;
                 });
 
