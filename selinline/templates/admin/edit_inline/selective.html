@@ -99,9 +99,9 @@
                 }
             });
 
-        $(title_container).delegate('.selective-inline-item', 'click', function(e){
+        $(title_container).delegate('.selective-inline-item > .title-holder', 'click', function(e){
             title_container.children('.active-title').removeClass('active-title');
-            $(this).addClass('active-title');
+            $(this).parent().addClass('active-title');
         });
 
         $(title_container).find('.mark-deleted').click(function(e){
