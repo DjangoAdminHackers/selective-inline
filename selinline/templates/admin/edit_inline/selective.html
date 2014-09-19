@@ -76,6 +76,12 @@
 
 <script type="text/javascript">
     (function($){
+        function setTitleContainerHeight(el){
+          var inlineHeight = $(el).parent().find('.inline-related').height();
+          var selectiveInlineHeight = el.parent().parent().height();
+          var maxHeight = Math.max(inlineHeight, selectiveInlineHeight);
+          el.parent().parent().css({'height': maxHeight});
+        };
         var prefix = '{{ inline_admin_formset.formset.prefix }}',
             title_container = $('#' + prefix + '-titles').children('ul'),
             formset = new djangoFormset({
@@ -94,6 +100,7 @@
                         var $el = $(el);
                         if($el.data('form-num')){
                             $el.find('.counter').text(parseInt($el.data('form-num')) + 1);
+                            setTitleContainerHeight($el);
                         }
                     });
                 }
@@ -102,6 +109,7 @@
         $(title_container).delegate('.selective-inline-item > .title-holder', 'click', function(e){
             title_container.children('.active-title').removeClass('active-title');
             $(this).parent().addClass('active-title');
+            setTitleContainerHeight($(this));
         });
 
         $(title_container).find('.mark-deleted').click(function(e){
