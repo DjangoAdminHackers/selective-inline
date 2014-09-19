@@ -78,9 +78,9 @@
     (function($){
         function setTitleContainerHeight(el){
           var inlineHeight = $(el).parent().find('.inline-related').height();
-          var selectiveInlineHeight = el.parent().parent().height();
+          var selectiveInlineHeight = el.closest("ul").height();
           var maxHeight = Math.max(inlineHeight, selectiveInlineHeight);
-          el.parent().parent().css({'height': maxHeight});
+          el.closest('.selective-inline-titles').css({'height': maxHeight});
         };
         var prefix = '{{ inline_admin_formset.formset.prefix }}',
             title_container = $('#' + prefix + '-titles').children('ul'),
@@ -100,7 +100,7 @@
                         var $el = $(el);
                         if($el.data('form-num')){
                             $el.find('.counter').text(parseInt($el.data('form-num')) + 1);
-                            setTitleContainerHeight($el);
+                            setTitleContainerHeight($el.find('.title-holder'));
                         }
                     });
                 }
@@ -126,7 +126,7 @@
             return false;
         });
 
-        $('#' + prefix + '-titles li:first-child').click();
+        $('#' + prefix + '-titles li:first-child .title-holder').click();
 
         {% if inline_admin_formset.opts.orderable_field %}
             title_container.sortable({
