@@ -87,6 +87,7 @@
             formset = new djangoFormset({
                 'prefix': prefix,
                 'empty_form': title_container.find('.empty-title'),
+                'group_container_class': 'selective-inline-group',
                 'form_container_class': 'selective-inline-item',
                 'del_form_link_class': 'remove-container',
                 'add_form_link': $('#' + prefix + '-inline-add'),

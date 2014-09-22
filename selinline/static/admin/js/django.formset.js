@@ -4,6 +4,7 @@
  new djangoFormset({
      'prefix': 'form',
      'empty_form': $('.empty-form'),
+     'group_container_class': 'group_container',
      'form_container_class': 'form_container',
      'del_form_link_class': 'remove_form',
      'add_form_link': $('#add_form'),
@@ -31,7 +32,7 @@ var djangoFormset = (function($){
             self.total_forms_el = self.options.total_forms_el || $('#id_' + self.options.prefix + '-TOTAL_FORMS');
             self.max_forms_el = self.options.max_forms_el || $('#id_' + self.options.prefix + '-MAX_NUM_FORMS');
 
-            $('.' + self.options.form_container_class).parent().parent()
+            $('.' + self.options.group_container_class)
                 .delegate('.' + self.options.del_form_link_class, 'click', function(e){
                     self.remove_form($(this), e);
                     e.preventDefault();
