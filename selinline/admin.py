@@ -49,8 +49,9 @@ class SelectiveInline(InlineModelAdmin, six.with_metaclass(OrderableDefiningClas
         if self.declared_fieldsets:
             return self.declared_fieldsets
         form = self.get_formset(request, obj, fields=None).form
-        fields = [f for f in list(form.base_fields) if f != self.orderable_field] \
-                 + list(self.get_readonly_fields(request, obj))
+        fields = [f for f in list(form.base_fields) if f != self.orderable_field]
+        fields += list(self.get_readonly_fields(request, obj))
+
         return [(None, {'fields': fields})]
 
     def get_formset(self, request, obj=None, **kwargs):
