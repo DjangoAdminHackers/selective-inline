@@ -1,16 +1,17 @@
 ### -*- coding: utf-8 -*- ###
 
 from django.contrib import admin
+from django.contrib.admin.options import InlineModelAdmin
 
-from selinline.admin import SelectiveInline
+from selinline.admin import SelectiveInlineMixin
 
 from .models import Author, Book
 
 
-class BookAdminInline(SelectiveInline):
+class BookAdminInline(SelectiveInlineMixin, InlineModelAdmin):
     orderable_field = 'order_num'
     model = Book
-    extra = 1
+    extra = 0
 
 
 class AuthorAdmin(admin.ModelAdmin):

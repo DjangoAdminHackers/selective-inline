@@ -4,9 +4,8 @@ from django.contrib.admin.util import flatten_fieldsets
 from django.db import models
 from django import forms
 from django.utils import six
-from django.contrib.admin.options import InlineModelAdmin
 
-# django 1.5 and 1.6 compability hook
+# django 1.5 compability hook
 try:
     from django.contrib.admin.options import RenameBaseModelAdminMethods
     base_meta_class = RenameBaseModelAdminMethods
@@ -17,7 +16,7 @@ except ImportError:
 class OrderableDefiningClass(base_meta_class):
     def __new__(cls, name, bases, attrs):
         new_class = super(OrderableDefiningClass, cls).__new__(cls, name, bases, attrs)
-        if attrs.get('orderable_field') and new_class.form == forms.ModelForm:
+        if attrs.get('orderable_field') and getattr(new_class, 'form', forms.ModelForm) == forms.ModelForm:
             parent = (object,)
             Meta = type(str('Meta'),
                         parent,
@@ -32,12 +31,12 @@ class OrderableDefiningClass(base_meta_class):
         return new_class
 
 
-class SelectiveInline(InlineModelAdmin, six.with_metaclass(OrderableDefiningClass)):
+class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
     template = 'admin/edit_inline/selective.html'
     orderable_field = None
 
     def __init__(self, *args, **kwargs):
-        super(SelectiveInline, self).__init__(*args, **kwargs)
+        super(SelectiveInlineMixin, self).__init__(*args, **kwargs)
 
         if self.orderable_field:
             if self.orderable_field not in self.model._meta.get_all_field_names():
@@ -57,11 +56,11 @@ class SelectiveInline(InlineModelAdmin, six.with_metaclass(OrderableDefiningClas
     def get_formset(self, request, obj=None, **kwargs):
         if 'fields' not in kwargs and self.orderable_field:
             kwargs['fields'] = flatten_fieldsets(self.get_fieldsets(request, obj)) + [self.orderable_field]
-        return super(SelectiveInline, self).get_formset(request, obj=obj, **kwargs)
+        return super(SelectiveInlineMixin, self).get_formset(request, obj=obj, **kwargs)
 
     @property
     def media(self):
-        media = super(SelectiveInline, self).media
+        media = super(SelectiveInlineMixin, self).media
         media.add_js(['admin/js/django.formset.js', 'admin/js/jquery-ui-1.9.2.custom.min.js'])
         media.add_css({'all': ['admin/css/selective_inlines.css', ]})
         return media

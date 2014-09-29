@@ -25,10 +25,11 @@ The app provides one more inline class which supports all admin inline options a
 So admin.py example file:
 
     from django.contrib import admin
-    from selinline.admin import SelectiveInline
+    from django.contrib.admin.options import InlineModelAdmin
+    from selinline.admin import SelectiveInlineMixin
     from .models import Author, Book
 
-    class BookAdminInline(SelectiveInline):
+    class BookAdminInline(SelectiveInlineMixin, InlineModelAdmin):
         orderable_field = 'order_num'  # this option is required only for "ordering" feature
         model = Book
         extra = 1
