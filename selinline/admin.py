@@ -4,6 +4,8 @@ from django.contrib.admin.util import flatten_fieldsets
 from django.db import models
 from django import forms
 from django.utils import six
+from django.contrib.admin.options import InlineModelAdmin
+
 
 # django 1.5 compability hook
 try:
@@ -64,3 +66,7 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
         media.add_js(['admin/js/django.formset.js', 'admin/js/jquery-ui-1.9.2.custom.min.js'])
         media.add_css({'all': ['admin/css/selective_inlines.css', ]})
         return media
+
+
+class SelectiveInline(SelectiveInlineMixin, InlineModelAdmin):
+    pass
