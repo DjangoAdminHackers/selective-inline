@@ -75,6 +75,27 @@
 </div>
 
 <script type="text/javascript">
+    function clearMCE(ui){
+        if( $('.mce_inited').add('.mce_fields').length){
+            $('.mce_inited',ui).add('.mce_fields',ui).each(function(i) {
+                tinyMCE.execCommand("mceRemoveControl",true,this.id);
+            });
+        }
+    }
+
+    function reinitMCE(ui){
+        if( $('.mce_inited').add('.mce_fields').length){
+            $('.mce_inited',ui).add('.mce_fields',ui).each(function(i) {
+                tinyMCE.execCommand("mceAddControl",false,this.id);
+            });
+        };
+    }
+
+    function clearThenInitMCE(ui){
+        clearMCE(ui);
+        reinitMCE(ui);
+    }
+
     (function($){
         function setTitleContainerHeight(el){
           var inlineHeight = $(el).parent().find('.inline-related').height();
@@ -111,6 +132,8 @@
             title_container.children('.active-title').removeClass('active-title');
             $(this).parent().addClass('active-title');
             setTitleContainerHeight($(this));
+            clearThenInitMCE($('.active-title'));
+            //setTimeout( "clearThenInitMCE($('.active-title'));", 100)
         });
 
         $(title_container).find('.mark-deleted').click(function(e){
@@ -141,10 +164,14 @@
                 helper: function(){
                     return $('<div class="dragged-clone"></div>');
                 },
+                start: function(event, ui){
+                    clearMCE(ui)
+                },
                 stop: function(event, ui){
                     title_container.children().each(function(i, el){
                         $(el).find('.orderable-input').val(i);
                     });
+                    reinitMCE(ui)
                 }
             });
 
