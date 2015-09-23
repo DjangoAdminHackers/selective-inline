@@ -1,6 +1,8 @@
 {% load i18n admin_static %}
 <div class="inline-group selective-inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
+
     <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }}</h2>
+
     {{ inline_admin_formset.formset.management_form }}
     {{ inline_admin_formset.formset.non_form_errors }}
 
@@ -74,38 +76,45 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    function clearMCE(ui){
-        if( $('.mce_inited').add('.mce_fields').length){
-            $('.mce_inited',ui).add('.mce_fields',ui).each(function(i) {
-                tinyMCE.execCommand("mceRemoveControl",true,this.id);
-            });
-        }
-    }
+<script>
 
-    function reinitMCE(ui){
-        if( $('.mce_inited').add('.mce_fields').length){
-            $('.mce_inited',ui).add('.mce_fields',ui).each(function(i) {
-                tinyMCE.execCommand("mceAddControl",false,this.id);
-            });
-        };
-    }
-
-    function clearThenInitMCE(ui){
-        clearMCE(ui);
-        reinitMCE(ui);
-    }
-
-    (function($){
-        function setTitleContainerHeight(el){
-          var inlineHeight = $(el).parent().find('.inline-related').height();
-          var selectiveInlineHeight = el.closest("ul").height();
-          var maxHeight = Math.max(inlineHeight, selectiveInlineHeight);
-          el.closest('.selective-inline-titles').css({'height': maxHeight});
-        };
-        var prefix = '{{ inline_admin_formset.formset.prefix }}',
-            title_container = $('#' + prefix + '-titles').children('ul'),
-            formset = new djangoFormset({
+    ($ || django.jQuery)(function($){
+    
+        $(document).ready(function($) {
+        
+            function clearMCE(ui){
+                if( $('.mce_inited').add('.mce_fields').length){
+                    $('.mce_inited',ui).add('.mce_fields',ui).each(function(i) {
+                        tinyMCE.execCommand("mceRemoveControl",true,this.id);
+                    });
+                }
+            }
+        
+            function reinitMCE(ui){
+                if( $('.mce_inited').add('.mce_fields').length){
+                    $('.mce_inited',ui).add('.mce_fields',ui).each(function(i) {
+                        tinyMCE.execCommand("mceAddControl",false,this.id);
+                    });
+                }
+            }
+        
+            function clearThenInitMCE(ui){
+                clearMCE(ui);
+                reinitMCE(ui);
+            }
+        
+            function setTitleContainerHeight(el){
+                var inlineHeight = $(el).parent().find('.inline-related').height();
+                var selectiveInlineHeight = el.closest("ul").height();
+                var maxHeight = Math.max(inlineHeight, selectiveInlineHeight);
+                el.closest('.selective-inline-titles').css({'height': maxHeight});
+            }
+        
+            var prefix = '{{ inline_admin_formset.formset.prefix }}';
+            var title_container = $('#' + prefix + '-titles').children('ul');
+            var orderable_fields = '{% if inline_admin_formset.opts.orderable_field %}true{% else %}false{% endif %}';
+        
+            var formset = new djangoFormset({
                 'prefix': prefix,
                 'empty_form': title_container.find('.empty-title'),
                 'group_container_class': 'selective-inline-group',
@@ -127,67 +136,74 @@
                     });
                 }
             });
-
-        $(title_container).delegate('.selective-inline-item > .title-holder', 'click', function(e){
-            title_container.children('.active-title').removeClass('active-title');
-            $(this).parent().addClass('active-title');
-            setTitleContainerHeight($(this));
-            clearThenInitMCE($('.active-title'));
-            //setTimeout( "clearThenInitMCE($('.active-title'));", 100)
-        });
-
-        $(title_container).find('.mark-deleted').click(function(e){
-            e.preventDefault();
-            $(this).closest('.selective-inline-item').addClass('deleted')
-                   .find('span.delete').children('input').prop('checked', 'checked');
-            return false;
-        });
-
-        $(title_container).find('.restore-link').click(function(e){
-            e.preventDefault();
-            $(this).closest('.selective-inline-item').removeClass('deleted')
-                   .find('span.delete').children('input').removeProp('checked');
-            return false;
-        });
-
-        $('#' + prefix + '-titles li:first-child .title-holder').click();
-
-        {% if inline_admin_formset.opts.orderable_field %}
-            title_container.sortable({
-                placeholder: "sortable-placeholder",
-                axis: "y",
-                containment: "parent",
-                "cursorAt": { top: 5 },
-                forceHelperSize: true,
-                tolerance: "pointer",
-                handle: '.selective-grab-holder',
-                helper: function(){
-                    return $('<div class="dragged-clone"></div>');
-                },
-                start: function(event, ui){
-                    clearMCE(ui)
-                },
-                stop: function(event, ui){
-                    title_container.children().each(function(i, el){
-                        $(el).find('.orderable-input').val(i);
-                    });
-                    reinitMCE(ui)
-                }
+    
+            $(title_container).delegate('.selective-inline-item > .title-holder', 'click', function(e){
+                title_container.children('.active-title').removeClass('active-title');
+                $(this).parent().addClass('active-title');
+                setTitleContainerHeight($(this));
+                clearThenInitMCE($('.active-title'));
             });
-
-            var max_order = 0;
-            title_container.children().each(function(i, el){
-                var order_el = $(el).find('.orderable-input'),
-                    order_val = parseInt(order_el.val() || 0);
-                if(order_val){
-                    if(order_val > max_order){
-                        max_order = order_val;
+    
+            $(title_container).find('.mark-deleted').click(function(e){
+                e.preventDefault();
+                $(this)
+                    .closest('.selective-inline-item')
+                    .addClass('deleted')
+                    .find('span.delete')
+                    .children('input')
+                    .prop('checked', 'checked');
+                return false;
+            });
+    
+            $(title_container).find('.restore-link').click(function(e){
+                e.preventDefault();
+                $(this)
+                    .closest('.selective-inline-item').removeClass('deleted')
+                    .find('span.delete').children('input').removeProp('checked');
+                return false;
+            });
+    
+            $('#' + prefix + '-titles li:first-child .title-holder').click();
+    
+            if (orderable_fields) {    
+        
+                title_container.sortable({
+                    placeholder: "sortable-placeholder",
+                    axis: "y",
+                    containment: "parent",
+                    "cursorAt": {top: 5},
+                    forceHelperSize: true,
+                    tolerance: "pointer",
+                    handle: '.selective-grab-holder',
+                    helper: function(){
+                        return $('<div class="dragged-clone"></div>');
+                    },
+                    start: function(event, ui){
+                        clearMCE(ui);
+                    },
+                    stop: function(event, ui){
+                        title_container.children().each(function(i, el){
+                            $(el).find('.orderable-input').val(i);
+                        });
+                        reinitMCE(ui);
                     }
-                } else {
-                    max_order++;
-                    order_el.val(max_order);
-                }
-            });
-        {% endif %}
-    })(django.jQuery);
+                });
+    
+                var max_order = 0;
+                
+                title_container.children().each(function(i, el){
+                    var order_el = $(el).find('.orderable-input');
+                    var order_val = parseInt(order_el.val() || 0);
+                    if (order_val) {
+                        if (order_val > max_order) {
+                            max_order = order_val;
+                        }
+                    } else {
+                        max_order++;
+                        order_el.val(max_order);
+                    }
+                });
+            }
+        })
+    })
 </script>
