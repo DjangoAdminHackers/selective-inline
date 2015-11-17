@@ -50,6 +50,10 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
                 raise AttributeError('"%s" field is not an integer one' % self.orderable_field)
 
     def get_fieldsets(self, request, obj=None):
+        # This fixed a strange bug
+        # can't see why as super doesn't appear to have side-effects
+        # However this is harmless because we discard the return value
+        super(SelectiveInlineMixin, self).get_fieldsets(request, obj)
         if self.declared_fieldsets:
             return self.declared_fieldsets
         form = self.get_formset(request, obj, fields=None).form
