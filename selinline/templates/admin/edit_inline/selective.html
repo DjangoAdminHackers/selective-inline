@@ -82,27 +82,6 @@
     
         $(document).ready(function($) {
         
-            function clearMCE(ui){
-                if($('.mce_inited').add('.mce_fields').length){
-                    $('.mce_inited', ui).add('.mce_fields', ui).each(function(i) {
-                        tinyMCE.execCommand("mceRemoveControl", true, this.id);
-                    });
-                }
-            }
-        
-            function reinitMCE(ui){
-                if( $('.mce_inited').add('.mce_fields').length){
-                    $('.mce_inited',ui).add('.mce_fields',ui).each(function(i) {
-                        tinyMCE.execCommand("mceAddControl", false, this.id);
-                    });
-                }
-            }
-        
-            function clearThenInitMCE(ui){
-                clearMCE(ui);
-                reinitMCE(ui);
-            }
-        
             function setTitleContainerHeight(el){
                 var inlineHeight = $(el).parent().find('.inline-related').height();
                 var selectiveInlineHeight = el.closest("ul").height();
@@ -141,7 +120,6 @@
                 title_container.children('.active-title').removeClass('active-title');
                 $(this).parent().addClass('active-title');
                 setTitleContainerHeight($(this));
-                clearThenInitMCE($('.active-title'));
             });
     
             $(title_container).find('.mark-deleted').click(function(e){
