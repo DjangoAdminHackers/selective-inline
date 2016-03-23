@@ -44,7 +44,7 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
         super(SelectiveInlineMixin, self).__init__(*args, **kwargs)
 
         if self.orderable_field:
-            if self.orderable_field not in self.model._meta.get_all_field_names():
+            if self.orderable_field not in [x.name for x in self.model._meta.get_fields()]:
                 raise AttributeError('%s model does not have "%s" field' % (self.model.__name__, self.orderable_field))
             if not issubclass(type(self.model._meta.get_field_by_name(self.orderable_field)[0]), models.IntegerField):
                 raise AttributeError('"%s" field is not an integer one' % self.orderable_field)
