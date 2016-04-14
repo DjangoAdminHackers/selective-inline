@@ -31,8 +31,8 @@ var djangoFormset = (function($){
             self.id_regex = new RegExp("(" + self.options.prefix + "-(\\d+|__prefix__))");
             self.total_forms_el = self.options.total_forms_el || $('#id_' + self.options.prefix + '-TOTAL_FORMS');
             self.max_forms_el = self.options.max_forms_el || $('#id_' + self.options.prefix + '-MAX_NUM_FORMS');
-
-            $('body').on('click', '.' + self.options.del_form_link_class, function(e){
+            var remove_selector = '#' + self.options.prefix + '-group .' + self.options.del_form_link_class;
+            $('body').on('click', remove_selector, function(e){
                 self.remove_form($(this), e);
                 e.preventDefault();
                 return false;
@@ -44,12 +44,25 @@ var djangoFormset = (function($){
                     e.preventDefault();
                     return false;
                 });
+                self.check_can_add();
             }
+        },
+        
+        check_can_add: function(){
+            var self = this;
+            var forms_count = parseInt(self.total_forms_el.val());
+            var can_add = self.max_forms_el.val() && forms_count < parseInt(self.max_forms_el.val());
+            if (can_add) {
+                self.options.add_form_link.show();
+            } else {
+                self.options.add_form_link.hide();
+            }
+            return can_add;
         },
 
         remove_form: function(link, event){
-            var self = this,
-                target_form = link.closest('.' + self.options.form_container_class);
+            var self = this;
+            var target_form = link.closest('.' + self.options.form_container_class);
 
             target_form.nextAll('.' + self.options.form_container_class).each(function(index, el){
                 self.set_new_form_index($(el), null);
@@ -60,13 +73,14 @@ var djangoFormset = (function($){
             if(self.options.postFormDelete){
                 self.options.postFormDelete(self);
             }
+            self.check_can_add();
         },
 
         add_form: function(link, event) {
-            var self = this,
-                forms_count = parseInt(self.total_forms_el.val());
-
-            if (self.max_forms_el.val() && forms_count >= parseInt(self.max_forms_el.val())) {
+            
+            var self = this;
+            
+            if (!self.check_can_add()) {
                 return;
             }
 
@@ -83,6 +97,9 @@ var djangoFormset = (function($){
             if (self.options.postFormAdd) {
                 self.options.postFormAdd(new_form, self);
             }
+            
+            self.check_can_add();
+            
             return new_form;
         },
 
