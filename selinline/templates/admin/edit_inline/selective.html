@@ -1,5 +1,10 @@
 {% load i18n admin_static %}
-<div class="inline-group selective-inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
+<div
+    class="inline-group selective-inline-group"
+    id="{{ inline_admin_formset.formset.prefix }}-group"
+    
+    data-prefix="{{ inline_admin_formset.formset.prefix }}"
+    data-is-orderable="{% if inline_admin_formset.opts.orderable_field %}true{% else %}false{% endif %}">
 
     <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }}</h2>
 
@@ -75,111 +80,3 @@
         </a>
     </div>
 </div>
-
-<script>
-
-    ($ || django.jQuery)(function($){
-    
-        $(document).ready(function($) {
-        
-            function setTitleContainerHeight(el){
-                var inlineHeight = $(el).parent().find('.inline-related').height();
-                var selectiveInlineHeight = el.closest("ul").height();
-                var maxHeight = Math.max(inlineHeight, selectiveInlineHeight);
-                el.closest('.selective-inline-titles').css({'height': maxHeight});
-            }
-        
-            var prefix = '{{ inline_admin_formset.formset.prefix }}';
-            var title_container = $('#' + prefix + '-titles').children('ul');
-            var orderable_fields = '{% if inline_admin_formset.opts.orderable_field %}true{% else %}false{% endif %}';
-        
-            var formset = new djangoFormset({
-                'prefix': prefix,
-                'empty_form': title_container.find('.empty-title'),
-                'group_container_class': 'selective-inline-group',
-                'form_container_class': 'selective-inline-item',
-                'del_form_link_class': 'remove-container',
-                'add_form_link': $('#' + prefix + '-inline-add'),
-                'empty_form_class': 'empty-title',
-                'postFormAdd': function(new_form, obj){
-                    var index = parseInt(obj.total_forms_el.val());
-                    new_form.find('.title-holder .counter').text(index).click();
-                },
-                'postFormDelete': function(obj){
-                    title_container.children().each(function(i, el){
-                        var $el = $(el);
-                        if($el.data('form-num')){
-                            $el.find('.counter').text(parseInt($el.data('form-num')) + 1);
-                            setTitleContainerHeight($el.find('.title-holder'));
-                        }
-                    });
-                }
-            });
-    
-            $(title_container).delegate('.selective-inline-item > .title-holder', 'click', function(e){
-                title_container.children('.active-title').removeClass('active-title');
-                $(this).parent().addClass('active-title');
-                setTitleContainerHeight($(this));
-            });
-    
-            $(title_container).find('.mark-deleted').click(function(e){
-                e.preventDefault();
-                $(this)
-                    .closest('.selective-inline-item')
-                    .addClass('deleted')
-                    .find('span.delete')
-                    .children('input')
-                    .prop('checked', 'checked');
-                return false;
-            });
-    
-            $(title_container).find('.restore-link').click(function(e){
-                e.preventDefault();
-                $(this)
-                    .closest('.selective-inline-item').removeClass('deleted')
-                    .find('span.delete').children('input').removeProp('checked');
-                return false;
-            });
-    
-            $('#' + prefix + '-titles li:first-child .title-holder').click();
-    
-            if (orderable_fields) {    
-        
-                title_container.sortable({
-                    placeholder: "sortable-placeholder",
-                    axis: "y",
-                    containment: "parent",
-                    "cursorAt": {top: 5},
-                    forceHelperSize: true,
-                    tolerance: "pointer",
-                    handle: '.selective-grab-holder',
-                    helper: function(){
-                        return $('<div class="dragged-clone"></div>');
-                    },
-                    start: function(event, ui){
-                    },
-                    stop: function(event, ui){
-                        title_container.children().each(function(i, el){
-                            $(el).find('.orderable-input').val(i);
-                        });
-                    }
-                });
-    
-                var max_order = 0;
-                
-                title_container.children().each(function(i, el){
-                    var order_el = $(el).find('.orderable-input');
-                    var order_val = parseInt(order_el.val() || 0);
-                    if (order_val) {
-                        if (order_val > max_order) {
-                            max_order = order_val;
-                        }
-                    } else {
-                        max_order++;
-                        order_el.val(max_order);
-                    }
-                });
-            }
-        })
-    })
-</script>
