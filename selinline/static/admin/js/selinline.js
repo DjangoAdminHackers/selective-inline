@@ -5,11 +5,15 @@
         $('.selective-inline-group').each(function() {
 
             function setTitleContainerHeight(el) {
-                var inlineHeight = $(el).parent().find('.inline-related').height();
-                var selectiveInlineHeight = el.closest("ul").height();
-                var maxHeight = Math.max(inlineHeight, selectiveInlineHeight);
-                el.closest('.selective-inline-titles').css({'height': maxHeight});
+                var fieldsetHeight = $(el).parent().find('.inline-related fieldset').height();
+                var titlesHeight = el.closest("ul").height();
+                var maxHeight = Math.max(fieldsetHeight, titlesHeight);
+                el.closest('.selective-inline-titles').height(maxHeight);
+                el.parent().find('.inline-related').height(maxHeight);
+                el.parent().find('.inline-related').css({'max-height': maxHeight})
             }
+            
+            setTitleContainerHeight($(this).find('.title-holder'));
 
             var prefix = $(this).data("prefix");
             var titleContainer = $('#' + prefix + '-titles').children('ul');
@@ -27,6 +31,7 @@
                 'postFormAdd': function (new_form, obj) {
                     var index = parseInt(obj.total_forms_el.val());
                     new_form.find('.title-holder .counter').text(index).click();
+                    setTitleContainerHeight(new_form.find('.title-holder'));
                 },
                 'postFormDelete': function (obj) {
                     titleContainer.children().each(function (i, el) {
