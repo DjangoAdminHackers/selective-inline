@@ -18,7 +18,7 @@
             var prefix = $(this).data("prefix");
             var titleContainer = $('#' + prefix + '-titles').children('ul');
 
-            var isOrderable = ($(this).data("is-orderable") === 'true');
+            var isOrderable = $(this).data("is-orderable");
 
             var formset = new djangoFormset({
                 'prefix': prefix,
