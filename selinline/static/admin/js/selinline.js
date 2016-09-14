@@ -112,7 +112,7 @@
                 if(auto_orderable_field){
                     var button_id = prefix + 'auto_orderable_button'
                     var button_text = 'Auto Sort'
-                    $(this).find('h2').append(' (<a href="#" id="' + button_id + '">' + button_text + '</a>)')
+                    $(this).find('h2').append(' (<a href="#" id="' + button_id + '" class="button">' + button_text + '</a>)')
                     $('#' + button_id).click(function(e) {
                         e.preventDefault()
                         var mylist = titleContainer;
