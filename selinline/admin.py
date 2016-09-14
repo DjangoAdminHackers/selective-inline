@@ -33,6 +33,8 @@ class OrderableDefiningClass(base_meta_class):
 
             if 'ordering' not in attrs:
                 new_class.ordering = (attrs['orderable_field'], )
+            if attrs.get('auto_orderable_field', False):
+                new_class.auto_orderable_field = attrs.get('auto_orderable_field')
         return new_class
 
 

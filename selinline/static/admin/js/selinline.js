@@ -19,6 +19,7 @@
             var titleContainer = $('#' + prefix + '-titles').children('ul');
 
             var isOrderable = $(this).data("is-orderable");
+            var auto_orderable_field = $(this).data("auto-orderable-field");
 
             var formset = new djangoFormset({
                 'prefix': prefix,
@@ -107,6 +108,35 @@
                         order_el.val(max_order);
                     }
                 });
+
+                if(auto_orderable_field){
+                    var button_id = prefix + 'auto_orderable_button'
+                    var button_text = 'Auto Sort'
+                    $(this).find('h2').append(' (<a href="#" id="' + button_id + '">' + button_text + '</a>)')
+                    $('#' + button_id).click(function(e) {
+                        e.preventDefault()
+                        var mylist = titleContainer;
+                        var listitems = titleContainer.children('li').get();
+                        listitems.sort(function(a, b) {
+                            var compA = $('.field-' + auto_orderable_field, a).find('p').text();
+                            var compB = $('.field-' + auto_orderable_field, b).find('p').text();
+                            diff = (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+                            if(diff == 0){
+                                compA = $('.orderable-input', a).val()
+                                compB = $('.orderable-input', b).val()
+                                diff = (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+                            }
+                            return diff
+                        });
+                        $.each(listitems, function(i, el) {
+                            mylist.append(el);
+                            $(el).find('.orderable-input').val(i);
+                        });
+                        $(titleContainer).sortable("refresh");
+                    });
+                }
+
+
             }
         });
     })

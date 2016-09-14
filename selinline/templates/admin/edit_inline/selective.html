@@ -4,9 +4,11 @@
     id="{{ inline_admin_formset.formset.prefix }}-group"
     
     data-prefix="{{ inline_admin_formset.formset.prefix }}"
-    data-is-orderable="{% if inline_admin_formset.opts.orderable_field %}true{% else %}false{% endif %}">
+    data-is-orderable="{% if inline_admin_formset.opts.orderable_field %}true{% else %}false{% endif %}"
+    data-auto-orderable-field="{% if inline_admin_formset.opts.auto_orderable_field %}{{ inline_admin_formset.opts.auto_orderable_field }}{% endif %}">
 
     <h2>{{ inline_admin_formset.opts.verbose_name_plural|title }}</h2>
+
 
     {{ inline_admin_formset.formset.management_form }}
     {{ inline_admin_formset.formset.non_form_errors }}
@@ -67,6 +69,7 @@
                         {{ inline_admin_form.fk_field.field }}
 
                         {{ inline_admin_form.form.show_orderable_field }}
+                        {{ inline_admin_form.form.show_auto_orderable_field }}
                     </div>
                 </li>
             {% endfor %}
