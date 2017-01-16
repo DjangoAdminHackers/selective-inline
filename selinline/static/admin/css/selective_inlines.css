@@ -32,10 +32,9 @@
 .selective-inline-item .inline-related {
     display: none;
     position: absolute;
-    top: 20px;
+    top: 0 !important;
     right: 0;
     left: 301px;
-    max-height: 350px;
     overflow-y: auto;
 }
 .selective-inline-item.active-title > .inline-related { display: block; }

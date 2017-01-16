@@ -48,28 +48,29 @@
                             </span>
                         </div>
                     </div>
-
                     <div class="inline-related" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
-                        {% if inline_admin_form.show_url %}
-                            <h3>
-                                <a href="{% url 'admin:view_on_site' inline_admin_form.original_content_type_id inline_admin_form.original.pk %}">
-                                    {% trans "View on site" %}
-                                </a>
-                            </h3>
-                        {% endif %}
-                        {{ inline_admin_form.form.non_field_errors }}
-                        {% for fieldset in inline_admin_form %}
-                            {% include "admin/includes/fieldset.html" %}
-                        {% endfor %}
-                        {# django <= 1.5 #}
-                        {% if inline_admin_form.has_auto_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
-                        {{ inline_admin_form.fk_field.field }}
-                        {# django >= 1.6 #}
-                        {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
-                        {{ inline_admin_form.fk_field.field }}
-
-                        {{ inline_admin_form.form.show_orderable_field }}
-                        {{ inline_admin_form.form.show_auto_orderable_field }}
+                        <div class="selinline-inner">
+                            {% if inline_admin_form.show_url %}
+                                <h3>
+                                    <a href="{% url 'admin:view_on_site' inline_admin_form.original_content_type_id inline_admin_form.original.pk %}">
+                                        {% trans "View on site" %}
+                                    </a>
+                                </h3>
+                            {% endif %}
+                            {{ inline_admin_form.form.non_field_errors }}
+                            {% for fieldset in inline_admin_form %}
+                                {% include "admin/includes/fieldset.html" %}
+                            {% endfor %}
+                            {# django <= 1.5 #}
+                            {% if inline_admin_form.has_auto_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
+                            {{ inline_admin_form.fk_field.field }}
+                            {# django >= 1.6 #}
+                            {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
+                            {{ inline_admin_form.fk_field.field }}
+    
+                            {{ inline_admin_form.form.show_orderable_field }}
+                            {{ inline_admin_form.form.show_auto_orderable_field }}
+                        </div>
                     </div>
                 </li>
             {% endfor %}
