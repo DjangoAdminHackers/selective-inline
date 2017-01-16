@@ -8,7 +8,7 @@
                 var wrapperHeight = $(el).parent().find('.inline-related').height();
                 var fieldsetHeight = $(el).parent().find('.inline-related fieldset').height();
                 var titlesHeight = el.closest("ul").height();
-                var maxHeight = Math.max(fieldsetHeight, titlesHeight, setTitleContainerHeight);
+                var maxHeight = Math.max(fieldsetHeight, titlesHeight, wrapperHeight);
                 el.closest('.selective-inline-titles').height(maxHeight);
                 el.parent().find('.inline-related').height(maxHeight);
                 el.parent().find('.inline-related').css({'max-height': maxHeight})
