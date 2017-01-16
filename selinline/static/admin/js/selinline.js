@@ -5,9 +5,10 @@
         $('.selective-inline-group').each(function() {
 
             function setTitleContainerHeight(el) {
+                var wrapperHeight = $(el).parent().find('.inline-related').height();
                 var fieldsetHeight = $(el).parent().find('.inline-related fieldset').height();
                 var titlesHeight = el.closest("ul").height();
-                var maxHeight = Math.max(fieldsetHeight, titlesHeight);
+                var maxHeight = Math.max(fieldsetHeight, titlesHeight, setTitleContainerHeight);
                 el.closest('.selective-inline-titles').height(maxHeight);
                 el.parent().find('.inline-related').height(maxHeight);
                 el.parent().find('.inline-related').css({'max-height': maxHeight})
