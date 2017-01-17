@@ -9,11 +9,11 @@
                 var fieldsetHeight = $(el).parent().find('.selinline-inner').outerHeight();
                 var titlesHeight = el.closest("ul").outerHeight();
                 
-                var maxHeight = Math.max(fieldsetHeight, titlesHeight);
+                var newHeight = Math.max(fieldsetHeight, titlesHeight);
 
-                el.closest('.selective-inline-titles').height(maxHeight);
-                el.parent().find('.inline-related').height(maxHeight);
-                el.parent().find('.inline-related').css({'max-height': maxHeight});
+                el.closest('.selective-inline-titles').height(newHeight);
+                el.parent().find('.inline-related').height(newHeight);
+                el.parent().find('.inline-related').css({'max-height': newHeight});
                 
             }
             
