@@ -114,8 +114,8 @@
                 });
 
                 if(auto_orderable_field){
-                    var button_id = prefix + 'auto_orderable_button'
-                    var button_text = 'Auto Sort'
+                    var button_id = prefix + 'auto_orderable_button';
+                    var button_text = 'Auto Sort';
                     $(this).find('h2').append(' (<a href="#" id="' + button_id + '" class="button">' + button_text + '</a>)')
                     $('#' + button_id).click(function(e) {
                         e.preventDefault()
@@ -126,8 +126,8 @@
                             var compB = $('.field-' + auto_orderable_field, b).find('p').text();
                             diff = (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
                             if(diff == 0){
-                                compA = $('.orderable-input', a).val()
-                                compB = $('.orderable-input', b).val()
+                                compA = $('.orderable-input', a).val();
+                                compB = $('.orderable-input', b).val();
                                 diff = (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
                             }
                             return diff
@@ -139,8 +139,7 @@
                         $(titleContainer).sortable("refresh");
                     });
                 }
-
-
+                
             }
         });
     })
