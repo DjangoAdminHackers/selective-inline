@@ -77,6 +77,8 @@
             $('#' + prefix + '-titles li:first-child .title-holder').click();
 
             if (isOrderable) {
+                // bug fix. If .empty-title .inline-related has any height, the sortable keeps flickering
+                $('.empty-title .inline-related', titleContainer).height(1)
 
                 titleContainer.sortable({
                     placeholder: "sortable-placeholder",
