@@ -75,7 +75,7 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
         media.add_js([
             'admin/js/django.formset.js',
             'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
-            'admin/js/selinline.js?v=2',
+            'admin/js/selinline.js?v=3',
         ])
         media.add_css({'all': ['admin/css/selective_inlines.css', ]})
         return media
