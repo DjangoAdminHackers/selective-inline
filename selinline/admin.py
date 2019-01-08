@@ -48,7 +48,7 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
         if self.orderable_field:
             if self.orderable_field not in [x.name for x in self.model._meta.get_fields()]:
                 raise AttributeError('%s model does not have "%s" field' % (self.model.__name__, self.orderable_field))
-            if not issubclass(type(self.model._meta.get_field_by_name(self.orderable_field)[0]), models.IntegerField):
+            if not issubclass(type(self.model._meta.get_field(self.orderable_field)), models.IntegerField):
                 raise AttributeError('"%s" field is not an integer one' % self.orderable_field)
 
     def get_fieldsets(self, request, obj=None):
@@ -56,7 +56,7 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
         # can't see why as super doesn't appear to have side-effects
         # However this is harmless because we discard the return value
         super(SelectiveInlineMixin, self).get_fieldsets(request, obj)
-        if self.declared_fieldsets:
+        if getattr(self, 'declared_fieldsets', None):
             return self.declared_fieldsets
         form = self.get_formset(request, obj, fields=None).form
         fields = [f for f in list(form.base_fields) if f != self.orderable_field]
@@ -75,7 +75,7 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
         media.add_js([
             'admin/js/django.formset.js',
             'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
-            'admin/js/selinline.js?v=3',
+            'admin/js/selinline.js',
         ])
         media.add_css({'all': ['admin/css/selective_inlines.css', ]})
         return media

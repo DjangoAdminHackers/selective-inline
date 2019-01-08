@@ -52,7 +52,7 @@
                         <div class="selinline-inner">
                             {% if inline_admin_form.show_url %}
                                 <h3>
-                                    <a href="{% url 'admin:view_on_site' inline_admin_form.original_content_type_id inline_admin_form.original.pk %}">
+                                    <a href="{{ inline_admin_form.absolute_url }}">
                                         {% trans "View on site" %}
                                     </a>
                                 </h3>
