@@ -157,4 +157,4 @@ var djangoFormset = (function($){
     });
 
     return formset;
-})(django.jQuery);
+})($ || django.jQuery);

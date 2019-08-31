@@ -69,16 +69,13 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
             kwargs['fields'] = flatten_fieldsets(self.get_fieldsets(request, obj)) + [self.orderable_field]
         return super(SelectiveInlineMixin, self).get_formset(request, obj=obj, **kwargs)
 
-    @property
-    def media(self):
-        media = super(SelectiveInlineMixin, self).media
-        media.add_js([
+    class Media:
+        js = [
             'admin/js/django.formset.js',
             'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
             'admin/js/selinline.js',
-        ])
-        media.add_css({'all': ['admin/css/selective_inlines.css', ]})
-        return media
+        ]
+        css = {'all': ['admin/css/selective_inlines.css', ]}
 
 
 class SelectiveInline(SelectiveInlineMixin, InlineModelAdmin):
