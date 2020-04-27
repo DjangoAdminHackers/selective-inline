@@ -36,6 +36,8 @@
                 'postFormAdd': function (new_form, obj) {
                     var index = parseInt(obj.total_forms_el.val());
                     new_form.find('.title-holder .counter').text(index).click();
+                    // trigger 'formset:added' event for autocomplete
+                    $(document).trigger('formset:added', [new_form, prefix]);
                     setTitleContainerHeight(new_form.find('.title-holder'));
                 },
                 'postFormDelete': function (obj) {
