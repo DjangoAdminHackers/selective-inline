@@ -75,7 +75,7 @@ class SelectiveInlineMixin(six.with_metaclass(OrderableDefiningClass)):
             'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
             'admin/js/selinline.v2.js',
         ]
-        css = {'all': ['admin/css/selective_inlines.css', ]}
+        css = {'all': ['admin/css/selective_inlines_v2.css', ]}
 
 
 class SelectiveInline(SelectiveInlineMixin, InlineModelAdmin):

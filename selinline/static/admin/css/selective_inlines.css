@@ -5,7 +5,7 @@
 .selective-inline-titles {
     width: 300px;
     float: left;
-    overflow-y: auto;
+    overflow-y: visible;
     height: 350px;
     border-right: 1px solid #eee;
 }
