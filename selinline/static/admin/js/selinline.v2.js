@@ -94,11 +94,24 @@
                         return $('<div class="dragged-clone"></div>');
                     },
                     start: function (event, ui) {
+                        // remove the mce widgets within the sortable item
+                        $(ui.item).find('.mce_inited').each(function(i){
+                            var text_id = $(this).attr('id');
+                            $('#' + text_id).removeClass('mce_inited').addClass('mce_fields');
+                            tinyMCE.get(text_id).remove();
+                        })
                     },
                     stop: function (event, ui) {
                         titleContainer.children().each(function (i, el) {
                             $(el).find('.orderable-input').val(i);
                         });
+                        // re-init the mce widgets within the sortable item
+                        $(ui.item).find('.mce_fields').each(function(i){
+                            var text_id = $(this).attr('id');
+                            var field_tinyMCE_config = $('#' + text_id).data('mceConf');
+                            tinymce.init(field_tinyMCE_config);
+                            $('#' + text_id).removeClass('mce_fields').addClass('mce_inited');
+                        })
                     }
                 });
 
