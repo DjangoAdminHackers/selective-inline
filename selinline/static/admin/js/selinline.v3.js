@@ -103,7 +103,8 @@
                     },
                     stop: function (event, ui) {
                         titleContainer.children().each(function (i, el) {
-                            $(el).find('.orderable-input').val(i);
+                            var order_val = i + 1;
+                            $(el).find('.orderable-input').val(order_val);
                         });
                         // re-init the mce widgets within the sortable item
                         $(ui.item).find('.mce_fields').each(function(i){
@@ -119,7 +120,7 @@
 
                 titleContainer.children().each(function (i, el) {
                     var order_el = $(el).find('.orderable-input');
-                    var order_val = parseInt(order_el.val() || 0);
+                    var order_val = parseInt(order_el.val() || 1);
                     if (order_val) {
                         if (order_val > max_order) {
                             max_order = order_val;
@@ -150,8 +151,9 @@
                             return diff
                         });
                         $.each(listitems, function(i, el) {
+                            var order_val = i + 1;  // i is zero based, we need order to start from 1
                             mylist.append(el);
-                            $(el).find('.orderable-input').val(i);
+                            $(el).find('.orderable-input').val(order_val);
                         });
                         $(titleContainer).sortable("refresh");
                     });
